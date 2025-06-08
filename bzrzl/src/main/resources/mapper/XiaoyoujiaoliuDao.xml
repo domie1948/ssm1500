@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.XiaoyoujiaoliuDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.insertyonghu_id as insertyonghuId
+        ,a.insert_content as insertContent
+        ,a.insert_time as insertTime
+        ,a.updateyonghu_id as updateyonghuId
+        ,a.update_content as updateContent
+        ,a.update_time as updateTime
+        ,a.create_time as createTime
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.XiaoyoujiaoliuView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+--         ,insertyonghu.id as iid,
+        ,insertyonghu.username as iusername
+        ,insertyonghu.password as ipassword
+        ,insertyonghu.name as iname
+        ,insertyonghu.phone as iphone
+        ,insertyonghu.id_number as iidNumber
+        ,insertyonghu.sex_types as isexTypes
+        ,insertyonghu.my_photo as imyPhoto
+        ,insertyonghu.nation as ination
+        ,insertyonghu.politics_types as ipoliticsTypes
+        ,insertyonghu.birthplace as ibirthplace
+        ,insertyonghu.yonghu_types as iyonghuTypes
+--         ,updateyonghu.id as uid,
+        ,updateyonghu.username as uusername
+        ,updateyonghu.password as upassword
+        ,updateyonghu.name as uname
+        ,updateyonghu.phone as uphone
+        ,updateyonghu.id_number as uidNumber
+        ,updateyonghu.sex_types as usexTypes
+        ,updateyonghu.my_photo as umyPhoto
+        ,updateyonghu.nation as unation
+        ,updateyonghu.politics_types as upoliticsTypes
+        ,updateyonghu.birthplace as ubirthplace
+        ,updateyonghu.yonghu_types as uyonghuTypes
+
+        FROM xiaoyoujiaoliu  a
+        left JOIN yonghu insertyonghu ON a.insertyonghu_id = insertyonghu.id
+        left JOIN yonghu updateyonghu ON a.updateyonghu_id = updateyonghu.id
+
+        <where>
+
+            <if test=" params.iname != '' and params.iname != null and params.iname != 'null' ">
+                and insertyonghu.name like CONCAT('%',#{params.iname},'%')
+            </if>
+            <if test=" params.iphone != '' and params.iphone != null and params.iphone != 'null' ">
+                and insertyonghu.phone like CONCAT('%',#{params.iphone},'%')
+            </if>
+            <if test=" params.iidNumber != '' and params.iidNumber != null and params.iidNumber != 'null' ">
+                and insertyonghu.id_number like CONCAT('%',#{params.iidNumber},'%')
+            </if>
+            <if test="params.isexTypes != null">
+                and insertyonghu.sex_types = #{params.isexTypes}
+            </if>
+            <if test="params.iyonghuTypes != null">
+                and insertyonghu.yonghu_types = #{params.iyonghuTypes}
+            </if>
+
+
+
+
+            <if test=" params.uname != '' and params.uname != null and params.uname != 'null' ">
+                and updateyonghu.name like CONCAT('%',#{params.uname},'%')
+            </if>
+            <if test=" params.uphone != '' and params.uphone != null and params.uphone != 'null' ">
+                and updateyonghu.phone like CONCAT('%',#{params.uphone},'%')
+            </if>
+            <if test=" params.uidNumber != '' and params.uidNumber != null and params.uidNumber != 'null' ">
+                and updateyonghu.id_number like CONCAT('%',#{params.uidNumber},'%')
+            </if>
+            <if test="params.usexTypes != null">
+                and updateyonghu.sex_types = #{params.usexTypes}
+            </if>
+
+            <if test="params.uyonghuTypes != null">
+                and updateyonghu.yonghu_types = #{params.uyonghuTypes}
+            </if>
+
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
